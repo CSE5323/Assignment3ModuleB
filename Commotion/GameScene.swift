@@ -1,17 +1,17 @@
 //
 //  GameScene.swift
-//  Commotion
+//  Assignment3Game
 //
-//  Created by Eric Larson on 9/6/16.
-//  Copyright © 2016 Eric Larson. All rights reserved.
+//  Created by Jenn Le on 9/28/16.
+//  Copyright © 2016 Thakugan. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import SpriteKit
 import CoreMotion
 
 class GameScene: SKScene {
-
+    private var lastUpdateTime : TimeInterval = 0
     
     // MARK: Raw Motion Functions
     let motion = CMMotionManager()
@@ -39,80 +39,54 @@ class GameScene: SKScene {
         self.startMotionUpdates()
         
         // make sides to the screen
-        self.addSidesAndTop()
+        self.addAllSides()
         
-        // add some stationary blocks
-        self.addStaticBlockAtPoint(CGPoint(x: size.width * 0.1, y: size.height * 0.25))
-        self.addStaticBlockAtPoint(CGPoint(x: size.width * 0.9, y: size.height * 0.25))
-        
-        // add a spinning block
-        self.addBlockAtPoint(CGPoint(x: size.width * 0.5, y: size.height * 0.35))
-        
-        self.addSprite()
+        self.spawnBall()
+        self.spawnGoal()
     }
     
-    // MARK: Create Sprites Functions
-    func addSprite(){
-        let spriteA = SKSpriteNode(imageNamed: "sprite") // this is literally a sprite bottle... 😎
-        
-        spriteA.size = CGSize(width:size.width*0.1,height:size.height * 0.1)
-        
-        spriteA.position = CGPoint(x: size.width * random(min: CGFloat(0.1), max: CGFloat(0.9)), y: size.height * 0.75)
-        
-        spriteA.physicsBody = SKPhysicsBody(rectangleOf:spriteA.size)
-        spriteA.physicsBody?.restitution = random(min: CGFloat(1.0), max: CGFloat(1.5))
-        spriteA.physicsBody?.isDynamic = true
-        
-        self.addChild(spriteA)
-    }
-    
-    func addBlockAtPoint(_ point:CGPoint){
-        let 🔲 = SKSpriteNode()
-        
-        🔲.color = UIColor.red
-        🔲.size = CGSize(width:size.width*0.15,height:size.height * 0.05)
-        🔲.position = point
-        
-        🔲.physicsBody = SKPhysicsBody(rectangleOf:🔲.size)
-        🔲.physicsBody?.isDynamic = true
-        🔲.physicsBody?.pinned = true
-        
-        self.addChild(🔲)
-
-    }
-    
-    func addStaticBlockAtPoint(_ point:CGPoint){
-        let 🔲 = SKSpriteNode()
-        
-        🔲.color = UIColor.red
-        🔲.size = CGSize(width:size.width*0.1,height:size.height * 0.05)
-        🔲.position = point
-        
-        🔲.physicsBody = SKPhysicsBody(rectangleOf:🔲.size)
-        🔲.physicsBody?.isDynamic = true
-        🔲.physicsBody?.pinned = true
-        🔲.physicsBody?.allowsRotation = false
-        
-        self.addChild(🔲)
+    override func sceneDidLoad() {
+        self.lastUpdateTime = 0
         
     }
     
-    func addSidesAndTop(){
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        // Initialize _lastUpdateTime if it has not already been
+        if (self.lastUpdateTime == 0) {
+            self.lastUpdateTime = currentTime
+        }
+        
+        // Calculate time since last update
+        let dt = currentTime - self.lastUpdateTime
+        self.lastUpdateTime = currentTime
+    }
+    
+    func addAllSides(){
         let left = SKSpriteNode()
         let right = SKSpriteNode()
         let top = SKSpriteNode()
+        let bottom = SKSpriteNode()
         
-        left.size = CGSize(width:size.width*0.1,height:size.height)
+        left.size = CGSize(width:size.width*0.01,height:size.height)
         left.position = CGPoint(x:0, y:size.height*0.5)
         
-        right.size = CGSize(width:size.width*0.1,height:size.height)
+        right.size = CGSize(width:size.width*0.01,height:size.height)
         right.position = CGPoint(x:size.width, y:size.height*0.5)
         
-        top.size = CGSize(width:size.width,height:size.height*0.1)
+        top.size = CGSize(width:size.width,height:size.height*0.01)
         top.position = CGPoint(x:size.width*0.5, y:size.height)
         
-        for obj in [left,right,top]{
-            obj.color = UIColor.red
+        bottom.size = CGSize(width:size.width,height:size.height*0.01)
+        bottom.position = CGPoint(x:size.width*0.5, y:0)
+        
+        for obj in [left,right,top, bottom]{
+            obj.color = UIColor.black
             obj.physicsBody = SKPhysicsBody(rectangleOf:obj.size)
             obj.physicsBody?.isDynamic = true
             obj.physicsBody?.pinned = true
@@ -121,17 +95,37 @@ class GameScene: SKScene {
         }
     }
     
-    // MARK: UI Delegate Functions
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.addSprite()
+    func spawnBall() {
+        let ball = SKSpriteNode(imageNamed: "ballSprite")
+        
+        let ballSize = size.height * 0.1
+        ball.size = CGSize(width:ballSize,height:ballSize)
+        
+        ball.position = CGPoint(x: size.width * 0.50, y: size.height * 0.25)
+        
+        ball.physicsBody = SKPhysicsBody(rectangleOf:ball.size)
+        ball.physicsBody?.isDynamic = true
+        
+        self.addChild(ball)
     }
     
-    // MARK: Utility Functions (thanks ray wenderlich!)
-    func random() -> CGFloat {
-        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
-    }
-    
-    func random(min: CGFloat, max: CGFloat) -> CGFloat {
-        return random() * (max - min) + min
+    func spawnGoal() {
+        let hole = SKSpriteNode(imageNamed: "holeSprite")
+        
+        let holeSize = size.height * 0.1
+        hole.size = CGSize(width:holeSize,height:holeSize)
+        
+        //ensures the goal is not spawned at the same height as the ball
+        var randY = CGFloat(drand48())
+        while randY == 0.25 {
+            randY = CGFloat(drand48())
+        }
+        hole.position = CGPoint(x: size.width * CGFloat(drand48()), y: size.height * 0.25)
+        
+        hole.physicsBody = SKPhysicsBody(rectangleOf:hole.size)
+        hole.physicsBody?.isDynamic = true
+        hole.physicsBody?.pinned = true
+        
+        self.addChild(hole)
     }
 }
