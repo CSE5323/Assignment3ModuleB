@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
-
+    @IBOutlet weak var gameStatus: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,10 +23,27 @@ class GameViewController: UIViewController {
             view.showsFPS = true
             view.showsNodeCount = true
         }
+        
+        _ = Timer.scheduledTimer(timeInterval: 10,
+                                 target: self,
+                                 selector: #selector(GameViewController.update),
+                                 userInfo: nil, 
+                                 repeats: true)
+        
+       
     }
     
     override var prefersStatusBarHidden : Bool {
         return true
+    }
+    
+    func update() {
+        gameStatus.text = "Game Over!"
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2) ) {
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "viewController") as! GameViewController
+            self.present(vc, animated: true, completion: nil)
+        }
+        
     }
 
 }

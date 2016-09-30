@@ -9,7 +9,7 @@
         <!--Game View Controller-->
         <scene sceneID="0HU-jo-wV3">
             <objects>
-                <viewController title="Game View Controller" id="1B4-SH-Hsp" customClass="GameViewController" customModule="Assignment3Game" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Game View Controller" id="1B4-SH-Hsp" customClass="GameViewController" customModule="Commotion" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VCf-Zi-x8e"/>
                         <viewControllerLayoutGuide type="bottom" id="UaU-ir-Vw6"/>
@@ -17,12 +17,31 @@
                     <view key="view" contentMode="scaleToFill" id="Dwy-bH-Ngi" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="You have 10 seconds to find the exit!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nLl-DI-C6y">
+                                <frame key="frameInset" minX="22" minY="28" width="222" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text=" " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EnC-gU-clj">
+                                <frame key="frameInset" minX="22" minY="49" width="222" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="gameStatus" destination="EnC-gU-clj" id="6AL-IT-SAu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1wN-2k-1nC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="25" y="716"/>
+            <point key="canvasLocation" x="24.800000000000001" y="715.59220389805103"/>
         </scene>
     </scenes>
 </document>
